@@ -54,6 +54,7 @@ Contributions of any kind welcome! See the [contributing guide](contributing.md)
 # Thanks
 
 Special thanks to [asdf](https://github.com/asdf-vm/asdf)
+[nsaunders](https://github.com/nsaunders/asdf-purescript) (Now archived)
 
 # License
 
