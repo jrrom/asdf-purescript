@@ -61,15 +61,13 @@ install_version() {
 		fail "asdf-$TOOL_NAME supports release installs only"
 	fi
 
-  local release_file="$install_path/purs-$version.tar.gz"
   (
-    mkdir -p "$install_path/bin"
-    download_release "$version" "$release_file"
-    tar -xzf "$release_file" -C "$install_path" --strip-components=1 purescript/purs || fail "Could not extract $release_file"
-    mv "$install_path/purs" "$install_path/bin"
-    rm "$release_file"
+		mkdir -p "$install_path"
+		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
-		test -x "$install_path/bin/purs" || fail "Expected $install_path/$tool_cmd to be executable."
+		local tool_cmd
+		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
 
 		echo "$TOOL_NAME $version installation was successful!"
 	) || (
