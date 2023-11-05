@@ -15,18 +15,14 @@
 
 # Dependencies
 
-**TODO: adapt this section**
-
 - `bash`, `curl`, `tar`: generic POSIX utilities.
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
+- NodeJS
 
 # Install
 
 Plugin:
 
 ```shell
-asdf plugin add purescript
-# or
 asdf plugin add purescript https://github.com/jrrom/asdf-purescript.git
 ```
 
@@ -54,6 +50,10 @@ install & manage versions.
 Contributions of any kind welcome! See the [contributing guide](contributing.md).
 
 [Thanks goes to these contributors](https://github.com/jrrom/asdf-purescript/graphs/contributors)!
+
+# Thanks
+
+Special thanks to [asdf](https://github.com/asdf-vm/asdf)
 
 # License
 

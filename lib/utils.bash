@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for purescript.
 GH_REPO="https://github.com/purescript/purescript"
 TOOL_NAME="purescript"
 TOOL_TEST="purs --help"
@@ -31,18 +30,23 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if purescript has other means of determining installable versions.
 	list_github_tags
 }
 
 download_release() {
-	local version filename url
+	local version filename bin url
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for purescript
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    bin="linux64"
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    bin="macos"
+  else
+    fail "unrecognized operating system $OSTYPE"
+  fi
+
+  url="$GH_REPO/releases/download/v${version}/${bin}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -57,14 +61,15 @@ install_version() {
 		fail "asdf-$TOOL_NAME supports release installs only"
 	fi
 
-	(
-		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+  local release_file="$install_path/purs-$version.tar.gz"
+  (
+    mkdir -p "$install_path/bin"
+    download_release "$version" "$release_file"
+    tar -xzf "$release_file" -C "$install_path" --strip-components=1 purescript/purs || fail "Could not extract $release_file"
+    mv "$install_path/purs" "$install_path/bin"
+    rm "$release_file"
 
-		# TODO: Assert purescript executable exists.
-		local tool_cmd
-		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
+		test -x "$install_path/bin/purs" || fail "Expected $install_path/$tool_cmd to be executable."
 
 		echo "$TOOL_NAME $version installation was successful!"
 	) || (
