@@ -39,14 +39,14 @@ download_release() {
 	filename="$2"
 
 	if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    bin="linux64"
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
-    bin="macos"
-  else
-    fail "unrecognized operating system $OSTYPE"
-  fi
+		bin="linux64"
+	elif [[ "$OSTYPE" == "darwin"* ]]; then
+		bin="macos"
+	else
+		fail "unrecognized operating system $OSTYPE"
+	fi
 
-  url="$GH_REPO/releases/download/v${version}/${bin}.tar.gz"
+	url="$GH_REPO/releases/download/v${version}/${bin}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -61,7 +61,7 @@ install_version() {
 		fail "asdf-$TOOL_NAME supports release installs only"
 	fi
 
-  (
+	(
 		mkdir -p "$install_path"
 		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
 
